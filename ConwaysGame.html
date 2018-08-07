@@ -1,0 +1,132 @@
+<!-- HTML Conways game of life -->
+<html>
+<canvas id="gameCanvas" width="800" height="600">
+	<script>
+		var canvas;
+		var canvasContext;
+		var cell;
+		var cells;
+		var aliveCells;
+		var cellSize = 20;
+
+		window.onload = function() 
+		{
+			canvas = document.getElementById('gameCanvas');
+			canvasContext = canvas.getContext('2d');
+			
+			cells = [];
+			rows = Math.floor(canvas.height / cellSize);
+			cols = Math.floor(canvas.width / cellSize);
+			setUpCells(rows, cols);
+
+		    canvasLeft = canvas.offsetLeft;
+   			canvasTop = canvas.offsetTop;
+
+			canvas.addEventListener('click', function(event) 
+			{
+				var x = event.pageX - canvasLeft;
+				var	y = event.pageY - canvasTop;
+
+				clickCol = Math.floor(x / cellSize);
+				clickRow = Math.floor(y / cellSize);
+				cells[clickRow][clickCol].activate();
+
+				drawEverything();
+				playGame();
+
+			});
+
+			drawEverything();
+		}
+
+		function playGame()
+		{
+			var framesPerSecond = 5;
+			setInterval(function() 
+			{
+				drawEverything();
+				cells[5][5].activate();
+			}, 1000 / framesPerSecond);
+		}
+
+		function setUpCells(rows, cols)
+		{
+			for(var i = 0; i < rows; i++)
+			{
+				cells.push([]);
+				for(var j = 0; j < cols; j++)
+				{
+					cells[i].push(new Cell(cellSize * j, cellSize * i, cellSize, cellSize));
+				}
+			} 
+		}
+
+		function drawEverything()
+		{
+			canvasContext.fillStyle = 'black';
+			canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+
+			for(var i = 0; i < rows; i++)
+			{
+				cells.push([]);
+				for(var j = 0; j < cols; j++)
+				{
+					cells[i][j].draw();
+				}
+			} 			
+		}
+
+		class Cell
+		{
+			constructor(xCo, yCo, cellHeight, cellWidth)
+			{
+				this.xCo = xCo;
+				this.yCo = yCo;
+				this.cellHeight = cellHeight;
+				this.cellWidth = cellWidth;
+				this.alive = false;		        
+			}
+
+			setXCo(xCo)
+			{
+				this.xCo = xCo;
+			}
+
+			activate()
+			{
+				this.alive = !this.alive;
+			}
+
+			draw()
+			{
+				if (!this.alive)
+				{
+					canvasContext.strokeStyle = '#33ff33';
+					canvasContext.lineWidth='1';
+					canvasContext.strokeRect(this.xCo, this.yCo, this.cellHeight, this.cellWidth);
+				}
+				else 
+				{
+					canvasContext.fillStyle = 'red'
+					canvasContext.fillRect(this.xCo, this.yCo, this.cellHeight, this.cellWidth);
+					canvasContext.strokeStyle = '#33ff33';
+					canvasContext.lineWidth='1';
+					canvasContext.strokeRect(this.xCo, this.yCo, this.cellHeight, this.cellWidth);
+				}
+			}
+		}
+
+		function calculateMousePos(evt)
+		{
+			var rect = canvas.getBoundingClientRect();
+			var root = document.documentElement;
+			var mouseX = evt.clientX - rect.left - root.scrollLeft;
+			var mouseY = evt.clientY - rect.top - root.scrollTop;
+			return {
+				x:mouseX,
+				y:mouseY
+			};
+		}
+	</script>
+</canvas>
+</html>
