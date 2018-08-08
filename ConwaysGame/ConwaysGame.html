@@ -1,9 +1,12 @@
 <!-- HTML Conways game of life -->
 <html>
-<div text-align: center>
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<div style="text-align: center">
 	<h1>Conways Game Of Life</h1>
 </div>
-<div>
+<div style="margin: auto; text-align: center">
 	<canvas id="gameCanvas" width="800" height="600">
 		<script>
 			var canvas;
@@ -12,6 +15,7 @@
 			var cells;
 			var aliveCells;
 			var cellSize = 20;
+			var interval;
 	
 	
 			/*--------------------------------------------------------------------------------*/
@@ -55,11 +59,16 @@
 			function playGame()
 			{
 				var framesPerSecond = 5;
-				setInterval(function() 
+				interval = setInterval(function() 
 				{
 					drawEverything();
 					cells[5][5].activate();
 				}, 1000 / framesPerSecond);
+			}
+
+			function stopGame()
+			{
+				clearInterval(interval);
 			}
 	
 			function setUpCells(rows, cols)
@@ -124,6 +133,10 @@
 				activate()
 				{
 					this.alive = !this.alive;
+					if (this.alive)
+					{
+						
+					}
 				}
 	
 				draw()
@@ -147,7 +160,8 @@
 		</script>
 	</canvas>
 </div>
-<div>
-	<button onClick="playGame()">Play!</button>
+<div style="text-align: center; margin-top: 10px;">
+	<button onClick="playGame()" type="button" class="btn btn-dark">Play!</button>
+	<button onClick="stopGame()" type="button" class="btn btn-dark">Stop!</button>
 </div>
 </html>
